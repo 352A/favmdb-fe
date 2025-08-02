@@ -1,13 +1,13 @@
-import { useState } from "react";
 import UserMenu from "@/components/dashboard/user-menu";
 import ViewEntryModal from "@/components/dashboard/ViewEntryModal";
+import DeleteEntryModal from "@/components/dashboard/DeleteEntryModal";
 import EntryList from "@/components/dashboard/EntryList";
 import { useEntryQuery } from "@/hooks/useEntryQuery";
+import { useModal } from "@/hooks/useModal";
 import type { Entry } from "@/types";
 
 export default function Dashboard() {
-  const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { modal, openModal, closeModal } = useModal<Entry>();
 
   const {
     data,
@@ -25,20 +25,26 @@ export default function Dashboard() {
       <UserMenu />
       <EntryList
         entries={entries}
-        onView={(entry) => {
-          setSelectedEntry(entry);
-          setIsModalOpen(true);
-        }}
-        onDelete={(id) => deleteEntry(id)}
+        onView={(entry) => openModal("view", entry)}
+        onDelete={(entry) => openModal("delete", entry)}
         isLoading={isLoading}
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
       />
       <ViewEntryModal
-        entry={selectedEntry}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        entry={modal.type === "view" ? modal.data : null}
+        isOpen={modal.type === "view"}
+        onClose={closeModal}
+      />
+      <DeleteEntryModal
+        entry={modal.type === "delete" ? modal.data : null}
+        isOpen={modal.type === "delete"}
+        onClose={closeModal}
+        onConfirm={(id) => {
+          deleteEntry(id);
+          closeModal();
+        }}
       />
     </section>
   );

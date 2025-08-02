@@ -14,7 +14,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 // Each entry should capture detailed information such as title, director, budget, location,
 // duration, year/time, and any other relevant details.
 
@@ -25,54 +24,56 @@ export default function EntriesTable({
 }: {
   entries: Entry[];
   onView: (entry: Entry) => void;
-  onDelete: (id: number) => void;
+  onDelete: (entry: Entry) => void;
 }) {
   return (
-    <Table className="mt-12">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="">Title</TableHead>
-          <TableHead>Director</TableHead>
-          <TableHead>Budget</TableHead>
-          <TableHead>Location</TableHead>
-          <TableHead>Duration</TableHead>
-          <TableHead>Year/time</TableHead>
-          <TableHead>Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {entries.map((entry) => {
-          return (
-            <TableRow key={entry.id}>
-              <TableCell>{entry.title}</TableCell>
-              <TableCell>{entry.director}</TableCell>
-              <TableCell>{entry.budget}</TableCell>
-              <TableCell>{entry.location}</TableCell>
-              <TableCell>{entry.duration}</TableCell>
-              <TableCell>{entry.year}</TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="cursor-pointer outline-0">
-                    <LucideEllipsis />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="*:cursor-pointer">
-                    <DropdownMenuItem onClick={() => onView(entry)}>
-                      View
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem
-                      variant="destructive"
-                      onClick={() => onDelete(entry.id)}
-                    >
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <>
+      <Table className="mt-12">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="">Title</TableHead>
+            <TableHead>Director</TableHead>
+            <TableHead>Budget</TableHead>
+            <TableHead>Location</TableHead>
+            <TableHead>Duration</TableHead>
+            <TableHead>Year/time</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {entries.map((entry) => {
+            return (
+              <TableRow key={entry.id}>
+                <TableCell>{entry.title}</TableCell>
+                <TableCell>{entry.director}</TableCell>
+                <TableCell>{entry.budget}</TableCell>
+                <TableCell>{entry.location}</TableCell>
+                <TableCell>{entry.duration}</TableCell>
+                <TableCell>{entry.year}</TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="cursor-pointer outline-0">
+                      <LucideEllipsis />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="*:cursor-pointer">
+                      <DropdownMenuItem onClick={() => onView(entry)}>
+                        View
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onClick={() => onDelete(entry)}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </>
   );
 }

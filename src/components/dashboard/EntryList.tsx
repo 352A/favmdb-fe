@@ -6,7 +6,7 @@ import type { Entry } from "@/types";
 interface Props {
   entries: Entry[];
   onView: (entry: Entry) => void;
-  onDelete: (id: number) => void;
+  onDelete: (entry: Entry) => void;
   isLoading: boolean;
   fetchNextPage: () => void;
   hasNextPage?: boolean;

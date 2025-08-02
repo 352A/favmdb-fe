@@ -3,7 +3,7 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { fetchEntries, deleteEntry } from "@/services/services";
+import { fetchEntries, deleteEntry, createEntry } from "@/services/services";
 import { toast } from "sonner";
 
 export function useEntryQuery() {
@@ -14,6 +14,17 @@ export function useEntryQuery() {
     queryFn: fetchEntries,
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? null,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: createEntry,
+    onSuccess: () => {
+      toast.success("Entry created!");
+      queryClient.invalidateQueries({ queryKey: ["entries"] });
+    },
+    onError: () => {
+      toast.error("Could not create the entry.");
+    },
   });
 
   const deleteMutation = useMutation({
@@ -27,5 +38,9 @@ export function useEntryQuery() {
     },
   });
 
-  return { ...entriesQuery, deleteEntry: deleteMutation.mutate };
+  return {
+    ...entriesQuery,
+    createEntry: createMutation.mutate,
+    deleteEntry: deleteMutation.mutate,
+  };
 }
