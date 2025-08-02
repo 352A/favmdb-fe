@@ -21,11 +21,12 @@ import {
 export default function EntriesTable({
   entries,
   onView,
+  onDelete,
 }: {
   entries: Entry[];
   onView: (entry: Entry) => void;
+  onDelete: (id: number) => void;
 }) {
-  console.log(entries);
   return (
     <Table className="mt-12">
       <TableHeader>
@@ -54,12 +55,15 @@ export default function EntriesTable({
                   <DropdownMenuTrigger className="cursor-pointer outline-0">
                     <LucideEllipsis />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent className="*:cursor-pointer">
                     <DropdownMenuItem onClick={() => onView(entry)}>
                       View
                     </DropdownMenuItem>
                     <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem variant="destructive">
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onClick={() => onDelete(entry.id)}
+                    >
                       Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>
