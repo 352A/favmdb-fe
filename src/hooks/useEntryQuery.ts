@@ -6,12 +6,12 @@ import {
 import { fetchEntries, deleteEntry, createEntry } from "@/services/services";
 import { toast } from "sonner";
 
-export function useEntryQuery() {
+export function useEntryQuery(filters = {}) {
   const queryClient = useQueryClient();
 
   const entriesQuery = useInfiniteQuery({
-    queryKey: ["entries"],
-    queryFn: fetchEntries,
+    queryKey: ["entries", filters],
+    queryFn: ({ pageParam = null }) => fetchEntries({ pageParam, filters }),
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? null,
   });

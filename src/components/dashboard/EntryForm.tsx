@@ -275,6 +275,7 @@ export default function EntryForm({
                 <FormLabel className="mb-1">Number of Seasons</FormLabel>
                 <FormControl>
                   <Input
+                    type="number"
                     placeholder="e.g. 6 seasons"
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
@@ -321,14 +322,14 @@ export default function EntryForm({
         />
         <Button
           type="submit"
-          // disabled={mutation.isPending}
+          disabled={mutation.isPending}
           className="cursor-pointer"
         >
           {mutation.isPending
             ? "Submitting..."
             : type === "create"
-              ? "Create"
-              : "Update"}
+              ? "Create Entry"
+              : "Update Entry"}
         </Button>
       </form>
     </Form>

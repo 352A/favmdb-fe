@@ -8,9 +8,32 @@ import type { Entry } from "@/types";
 import { Button } from "@/components/ui/button";
 import CreateEntryModal from "@/components/dashboard/modals/CreateEntryModal";
 import UpdateEntryModal from "@/components/dashboard/modals/UpdateEntryModal";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Dashboard() {
   const { modal, openModal, closeModal } = useModal<Entry>();
+
+  const [filters, setFilters] = useState({
+    title: "",
+    director: "",
+    minBudget: "",
+    maxBudget: "",
+    location: "",
+    year: "",
+    type: "",
+  });
+
+  const handleFilterChange = (field: string, value: string) => {
+    setFilters((prev) => ({ ...prev, [field]: value }));
+  };
 
   const {
     data,
@@ -19,49 +42,104 @@ export default function Dashboard() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useEntryQuery();
+  } = useEntryQuery(filters);
 
   const entries = data?.pages.flatMap((page) => page.entries) || [];
 
   return (
-    <section className="mx-16 my-12">
+    <section className="mx-4 my-6 lg:mx-16 lg:my-12">
       <UserMenu />
 
-      {/* Filters */}
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <input
-          name="title"
-          placeholder="Filter by Title"
-          // onChange={handleFilterChange}
-          className="rounded border px-3 py-2"
-        />
-        <select
-          name="type"
-          // onChange={handleFilterChange}
-          className="rounded border px-3 py-2"
-        >
-          <option value="">All Types</option>
-          <option value="Film">Film</option>
-          <option value="Series">Series</option>
-          <option value="Documentary">Documentary</option>
-        </select>
-        <input
-          name="year"
-          type="number"
-          placeholder="Year"
-          // onChange={handleFilterChange}
-          className="rounded border px-3 py-2"
-        />
+      {/* filters */}
+      <h2 className="mt-8 text-2xl font-bold text-white">
+        Search & Filter Entries
+      </h2>
+      <p className="mt-1 text-sm text-zinc-400">
+        Narrow down the list by filling in any of the fields below. You can
+        search by title, director, year, location, or budget range.
+      </p>
+
+      <div className="mt-6">
+        <div className="flex justify-end">
+          <Button
+            variant="link"
+            className="mb-1 cursor-pointer p-2 text-sm"
+            onClick={() =>
+              setFilters({
+                title: "",
+                director: "",
+                minBudget: "",
+                maxBudget: "",
+                location: "",
+                year: "",
+                type: "",
+              })
+            }
+          >
+            Reset Filters
+          </Button>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
+          <Input
+            placeholder="Filter by Title"
+            value={filters.title}
+            onChange={(e) => handleFilterChange("title", e.target.value)}
+          />
+          <Select
+            value={filters.type}
+            onValueChange={(value) => handleFilterChange("type", value)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Movie">Movie</SelectItem>
+              <SelectItem value="TV Show">TV Show</SelectItem>
+            </SelectContent>
+          </Select>
+          <Input
+            placeholder="Filter by Director"
+            value={filters.director}
+            onChange={(e) => handleFilterChange("director", e.target.value)}
+          />
+          <Input
+            placeholder="Filter by Location"
+            value={filters.location}
+            onChange={(e) => handleFilterChange("location", e.target.value)}
+          />
+          <Input
+            type="number"
+            placeholder="Filter by Year"
+            value={filters.year}
+            onChange={(e) => handleFilterChange("year", e.target.value)}
+          />
+          <div className="flex gap-2">
+            <Input
+              type="number"
+              placeholder="Min Budget"
+              value={filters.minBudget}
+              onChange={(e) => handleFilterChange("minBudget", e.target.value)}
+            />
+            <Input
+              type="number"
+              placeholder="Max Budget"
+              value={filters.maxBudget}
+              onChange={(e) => handleFilterChange("maxBudget", e.target.value)}
+            />
+          </div>
+        </div>
       </div>
 
       {/* create a new entry */}
-      <Button
-        size="lg"
-        className="cursor-pointer bg-linear-to-r from-rose-800 to-violet-900 bg-[length:200%_100%] font-semibold text-white"
-        onClick={() => openModal("create", null)}
-      >
-        Add New Entry
-      </Button>
+      <div className="mt-12 flex w-full justify-center">
+        <Button
+          size="lg"
+          className="cursor-pointer bg-linear-to-r from-rose-800 to-violet-900 bg-[length:200%_100%] font-semibold text-white"
+          onClick={() => openModal("create", null)}
+        >
+          Add A New Entry
+        </Button>
+      </div>
       {/* List of entries */}
       <EntryList
         entries={entries}

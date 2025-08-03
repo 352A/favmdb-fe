@@ -2,9 +2,9 @@ import type { Entry } from "@/types";
 import api from "./api";
 
 // get all entries
-export const fetchEntries = async ({ pageParam = null }) => {
+export const fetchEntries = async ({ pageParam = null, filters = {} }) => {
   const response = await api.get("/entries", {
-    params: { cursor: pageParam },
+    params: { cursor: pageParam, ...filters },
     withCredentials: true,
   });
 
