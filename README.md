@@ -1,69 +1,115 @@
-# React + TypeScript + Vite
+# FavMDB Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite + TypeScript frontend for **FavMDB**, a modern web application to manage your favorite movies and TV shows.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Add, edit, and delete entries for movies and TV shows
+- Infinite scroll with cursor-based pagination
+- Filter entries by type, year, and director
+- Responsive table display with clean UI
+- User authentication (login/signup/logout)
+- Modern styling with Tailwind CSS and Shadcn UI
 
-## Expanding the ESLint configuration
+## 🧰 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Framework**: React + Vite + TypeScript
+- **Styling**: Tailwind CSS
+- **UI Library**: Shadcn UI
+- **Routing**: React Router
+- **State Management**: React Hooks + Context API
+- **Form Handling**: React Hook Form + Zod
+- **HTTP Client**: Axios
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🛠️ Setup Instructions
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/352A/favmdb-frontend.git
+cd favmdb-frontend
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install Dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+VITE_API_BASE_URL=http://localhost:5000
+```
+
+---
+
+## 🧪 Run the App
+
+```bash
+npm run dev
+```
+
+App should now be running at `http://localhost:5173`
+
+---
+
+## 📁 Folder Structure
+
+```bash
+favmdb-frontend/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── routes/
+│   ├── hooks/
+│   ├── lib/
+│   ├── context/
+│   ├── types/
+│   └── App.tsx
+├── public/
+├── .env
+├── index.html
+└── vite.config.ts
+```
+
+---
+
+## 🔐 Authentication
+
+- Auth is handled via token-based login (JWT)
+- User state is persisted across sessions using cookies
+- Protected routes redirect unauthenticated users to the login page
+
+---
+
+## 🧩 Features Overview
+
+- Add new entry via modal form
+- Edit entries with modal form
+- Delete with confirmation modal
+- Infinite scroll powered by intersection observer and backend cursor
+- Filters apply instantly and combine with pagination
+- UI adapts well on mobile and desktop
+
+---
+
+## 🧑‍💻 Contributing
+
+Pull requests are welcome. For major changes, please open an issue first.
+
+---
+
+## 📬 Contact
+
+For any questions or feedback, feel free to reach out to [ahmed95elhadad@gmail.com](mailto:ahmed95elhadad@gmail.com).
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.

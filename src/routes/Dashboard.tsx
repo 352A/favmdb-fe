@@ -116,13 +116,13 @@ export default function Dashboard() {
           <div className="flex gap-2">
             <Input
               type="number"
-              placeholder="Min Budget"
+              placeholder="e.g. 1000"
               value={filters.minBudget}
               onChange={(e) => handleFilterChange("minBudget", e.target.value)}
             />
             <Input
               type="number"
-              placeholder="Max Budget"
+              placeholder="e.g. 200000000"
               value={filters.maxBudget}
               onChange={(e) => handleFilterChange("maxBudget", e.target.value)}
             />

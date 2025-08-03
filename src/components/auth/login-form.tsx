@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginSchema, type LoginData } from "@/validators/loginSchema";
 import { Link } from "react-router-dom";
+import coverImg from "@/assets/9.jpg";
 
 export function LoginForm({
   className,
@@ -106,9 +107,9 @@ export function LoginForm({
 
           <div className="bg-muted relative hidden md:block">
             <img
-              src="/placeholder.svg"
+              src={coverImg}
               alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.8]"
             />
           </div>
         </CardContent>
