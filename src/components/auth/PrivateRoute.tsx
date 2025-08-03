@@ -5,7 +5,12 @@ import { Spinner } from "../ui/spinner";
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
 
-  if (loading) return <Spinner variant="ellipsis" />;
+  if (loading)
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spinner variant="ellipsis" />
+      </div>
+    );
 
   if (!user) return <Navigate to="/login" />;
 
