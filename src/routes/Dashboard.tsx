@@ -1,10 +1,13 @@
 import UserMenu from "@/components/dashboard/user-menu";
-import ViewEntryModal from "@/components/dashboard/ViewEntryModal";
-import DeleteEntryModal from "@/components/dashboard/DeleteEntryModal";
+import ViewEntryModal from "@/components/dashboard/modals/ViewEntryModal";
+import DeleteEntryModal from "@/components/dashboard/modals/DeleteEntryModal";
 import EntryList from "@/components/dashboard/EntryList";
 import { useEntryQuery } from "@/hooks/useEntryQuery";
 import { useModal } from "@/hooks/useModal";
 import type { Entry } from "@/types";
+import { Button } from "@/components/ui/button";
+import CreateEntryModal from "@/components/dashboard/modals/CreateEntryModal";
+import UpdateEntryModal from "@/components/dashboard/modals/UpdateEntryModal";
 
 export default function Dashboard() {
   const { modal, openModal, closeModal } = useModal<Entry>();
@@ -23,9 +26,19 @@ export default function Dashboard() {
   return (
     <section className="mx-16 my-12">
       <UserMenu />
+      {/* create a new entry */}
+      <Button
+        size="lg"
+        className="cursor-pointer bg-linear-to-r from-rose-800 to-violet-900 bg-[length:200%_100%] font-semibold text-white"
+        onClick={() => openModal("create", null)}
+      >
+        Add New Entry
+      </Button>
+      {/* List of entries */}
       <EntryList
         entries={entries}
         onView={(entry) => openModal("view", entry)}
+        onEdit={(entry) => openModal("edit", entry)}
         onDelete={(entry) => openModal("delete", entry)}
         isLoading={isLoading}
         fetchNextPage={fetchNextPage}
@@ -35,6 +48,12 @@ export default function Dashboard() {
       <ViewEntryModal
         entry={modal.type === "view" ? modal.data : null}
         isOpen={modal.type === "view"}
+        onClose={closeModal}
+      />
+      <CreateEntryModal isOpen={modal.type === "create"} onClose={closeModal} />
+      <UpdateEntryModal
+        entry={modal.type === "edit" ? modal.data : null}
+        isOpen={modal.type === "edit"}
         onClose={closeModal}
       />
       <DeleteEntryModal

@@ -20,18 +20,20 @@ import {
 export default function EntriesTable({
   entries,
   onView,
+  onEdit,
   onDelete,
 }: {
   entries: Entry[];
   onView: (entry: Entry) => void;
+  onEdit: (entry: Entry) => void;
   onDelete: (entry: Entry) => void;
 }) {
   return (
     <>
-      <Table className="mt-12">
+      <Table className="mt-12 overflow-hidden rounded-t-xl bg-white/4 [&_td]:px-12 [&_td]:py-4 [&_th]:px-12 [&_th]:py-6">
         <TableHeader>
-          <TableRow>
-            <TableHead className="">Title</TableHead>
+          <TableRow className="bg-linear-to-r from-rose-800 to-violet-900 bg-[length:200%_100%] *:font-semibold">
+            <TableHead>Title</TableHead>
             <TableHead>Director</TableHead>
             <TableHead>Budget</TableHead>
             <TableHead>Location</TableHead>
@@ -59,7 +61,9 @@ export default function EntriesTable({
                       <DropdownMenuItem onClick={() => onView(entry)}>
                         View
                       </DropdownMenuItem>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onEdit(entry)}>
+                        Edit
+                      </DropdownMenuItem>
                       <DropdownMenuItem
                         variant="destructive"
                         onClick={() => onDelete(entry)}

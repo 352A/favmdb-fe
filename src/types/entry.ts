@@ -3,12 +3,12 @@ export type Entry = {
   title: string;
   type: string;
   director: string;
-  budget: number;
+  budget: string;
   location: string;
   duration: string;
   year: number;
   details: string;
-  createdAt: string;
-  updatedAt: string;
-  userId: number;
+  createdAt?: string;
+  updatedAt?: string;
+  userId?: number;
 };

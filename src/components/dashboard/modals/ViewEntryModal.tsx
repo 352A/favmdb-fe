@@ -5,6 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { Entry } from "@/types";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 type ViewEntryModalProps = {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export default function ViewEntryModal({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{entry.title}</DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="mt-4 space-y-4">
           <p>

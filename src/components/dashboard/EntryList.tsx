@@ -6,6 +6,7 @@ import type { Entry } from "@/types";
 interface Props {
   entries: Entry[];
   onView: (entry: Entry) => void;
+  onEdit: (entry: Entry) => void;
   onDelete: (entry: Entry) => void;
   isLoading: boolean;
   fetchNextPage: () => void;
@@ -16,6 +17,7 @@ interface Props {
 export default function EntryList({
   entries,
   onView,
+  onEdit,
   onDelete,
   isLoading,
   fetchNextPage,
@@ -53,7 +55,12 @@ export default function EntryList({
 
   return (
     <>
-      <EntriesTable entries={entries} onView={onView} onDelete={onDelete} />
+      <EntriesTable
+        entries={entries}
+        onView={onView}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
       {hasNextPage ? (
         <div
           ref={observerRef}

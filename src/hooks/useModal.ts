@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export type ModalType = "view" | "delete" | "create" | null;
+export type ModalType = "view" | "delete" | "create" | "edit" | null;
 
 export interface ModalState<T> {
   type: ModalType;
@@ -13,7 +13,7 @@ export function useModal<T>() {
     data: null,
   });
 
-  const openModal = (type: ModalType, data: T) => {
+  const openModal = (type: ModalType, data: T | null) => {
     setModal({ type, data });
   };
 

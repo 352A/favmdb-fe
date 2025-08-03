@@ -34,6 +34,8 @@ export default function DeleteEntryModal({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogDescription></DialogDescription>
+
           <DialogDescription>
             Are you sure you want to delete "{entry?.title}"? This action cannot
             be undone.
