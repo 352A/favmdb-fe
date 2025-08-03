@@ -3,9 +3,11 @@ export type Entry = {
   title: string;
   type: string;
   director: string;
-  budget: string;
+  budget: number;
   location: string;
-  duration: string;
+  durationHours?: number;
+  durationMinutes?: number;
+  seasons?: number;
   year: number;
   details: string;
   createdAt?: string;

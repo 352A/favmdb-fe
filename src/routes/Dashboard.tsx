@@ -26,6 +26,34 @@ export default function Dashboard() {
   return (
     <section className="mx-16 my-12">
       <UserMenu />
+
+      {/* Filters */}
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <input
+          name="title"
+          placeholder="Filter by Title"
+          // onChange={handleFilterChange}
+          className="rounded border px-3 py-2"
+        />
+        <select
+          name="type"
+          // onChange={handleFilterChange}
+          className="rounded border px-3 py-2"
+        >
+          <option value="">All Types</option>
+          <option value="Film">Film</option>
+          <option value="Series">Series</option>
+          <option value="Documentary">Documentary</option>
+        </select>
+        <input
+          name="year"
+          type="number"
+          placeholder="Year"
+          // onChange={handleFilterChange}
+          className="rounded border px-3 py-2"
+        />
+      </div>
+
       {/* create a new entry */}
       <Button
         size="lg"

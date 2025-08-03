@@ -14,8 +14,27 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// Each entry should capture detailed information such as title, director, budget, location,
-// duration, year/time, and any other relevant details.
+
+// formatBudget function formats the budget string into a more readable format
+function formatBudget(budget: number) {
+  const value = Number(budget);
+  if (isNaN(value)) return budget;
+
+  const formatNumber = (num: number) => {
+    // Convert to string and remove trailing zeros after decimal
+    const formatted = num.toFixed(2).replace(/\.?0+$/, "");
+    return formatted;
+  };
+
+  if (value >= 1_000_000_000) {
+    return `${formatNumber(value / 1_000_000_000)}B`;
+  } else if (value >= 1_000_000) {
+    return `${formatNumber(value / 1_000_000)}M`;
+  } else if (value >= 1_000) {
+    return `${formatNumber(value / 1_000)}K`;
+  }
+  return budget;
+}
 
 export default function EntriesTable({
   entries,
@@ -48,9 +67,15 @@ export default function EntriesTable({
               <TableRow key={entry.id}>
                 <TableCell>{entry.title}</TableCell>
                 <TableCell>{entry.director}</TableCell>
-                <TableCell>{entry.budget}</TableCell>
+                <TableCell>{formatBudget(entry.budget)}</TableCell>
                 <TableCell>{entry.location}</TableCell>
-                <TableCell>{entry.duration}</TableCell>
+                {entry.type === "Movie" ? (
+                  <TableCell>
+                    {entry.durationHours}h {entry.durationMinutes}m
+                  </TableCell>
+                ) : (
+                  <TableCell>{entry.seasons} Seasons</TableCell>
+                )}
                 <TableCell>{entry.year}</TableCell>
                 <TableCell>
                   <DropdownMenu>

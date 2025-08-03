@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { Entry } from "@/types";
+import { composeBudget, decomposeBudget } from "@/lib/budget";
 
 export default function EntryForm({
   entry,
@@ -42,13 +43,14 @@ export default function EntryForm({
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn:
-      type === "create"
-        ? createEntry
-        : (data: z.infer<typeof entrySchema>) => {
-            if (!entry?.id) throw new Error("Entry ID is required for updates");
-            return updateEntry({ ...data, id: entry.id });
-          },
+    mutationFn: (data: z.infer<typeof entrySchema> & { id?: number }) => {
+      if (type === "create") {
+        return createEntry(data);
+      } else {
+        if (!entry?.id) throw new Error("Entry ID is required for updates");
+        return updateEntry({ ...data, id: entry.id });
+      }
+    },
     onSuccess: () => {
       toast.success(
         `Entry ${type === "create" ? "created" : "updated"} successfully`,
@@ -63,24 +65,44 @@ export default function EntryForm({
 
   const form = useForm<z.infer<typeof entrySchema>>({
     resolver: zodResolver(entrySchema),
-    defaultValues: entry || {
-      title: "",
-      type: "",
-      director: "",
-      budget: "",
-      location: "",
-      duration: "",
-      year: new Date().getFullYear(),
-      details: "",
-    },
+    defaultValues: entry
+      ? {
+          ...entry,
+          ...decomposeBudget(entry.budget ?? 0),
+          seasons: entry.seasons || undefined,
+          durationHours: entry.durationHours || undefined,
+          durationMinutes: entry.durationMinutes || undefined,
+        }
+      : {
+          title: "",
+          type: "",
+          director: "",
+          location: "",
+          durationHours: 0,
+          durationMinutes: 0,
+          seasons: 0,
+          year: new Date().getFullYear(),
+          details: "",
+          budgetAmount: 0,
+          budgetUnit: "M",
+          budget: 0,
+        },
   });
 
+  const watchType = form.watch("type");
+
   function onSubmit(values: z.infer<typeof entrySchema>) {
-    if (type === "update" && !entry?.id) {
-      toast.error("Cannot update entry without an ID");
-      return;
-    }
-    mutation.mutate(values);
+    console.log("submitting");
+    const { budgetAmount, budgetUnit, ...rest } = values;
+
+    const data = {
+      ...rest,
+      budgetAmount,
+      budgetUnit,
+      budget: composeBudget(budgetAmount, budgetUnit),
+    };
+
+    mutation.mutate(data);
   }
 
   return (
@@ -103,8 +125,8 @@ export default function EntryForm({
             </FormItem>
           )}
         />
-        {/* type */}
 
+        {/* type */}
         <FormField
           control={form.control}
           name="type"
@@ -112,11 +134,7 @@ export default function EntryForm({
             <FormItem>
               <FormLabel className="mb-1">Type</FormLabel>
               <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
@@ -144,20 +162,53 @@ export default function EntryForm({
             </FormItem>
           )}
         />
+
         {/* budget */}
-        <FormField
-          control={form.control}
-          name="budget"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="mb-1">Budget</FormLabel>
-              <FormControl>
-                <Input type="string" placeholder="e.g. 4.5M" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex items-end gap-2">
+          {/* Amount */}
+          <FormField
+            control={form.control}
+            name="budgetAmount"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel className="mb-1">Budget</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    placeholder="e.g. 4.5"
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Unit */}
+          <FormField
+            control={form.control}
+            name="budgetUnit"
+            render={({ field }) => (
+              <FormItem className="w-24">
+                <FormLabel className="mb-1">Unit</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Unit" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="K">K</SelectItem>
+                      <SelectItem value="M">M</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         {/* location */}
         <FormField
           control={form.control}
@@ -172,20 +223,69 @@ export default function EntryForm({
             </FormItem>
           )}
         />
+
         {/* duration */}
-        <FormField
-          control={form.control}
-          name="duration"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="mb-1">Duration</FormLabel>
-              <FormControl>
-                <Input placeholder="2h 30m" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {watchType === "Movie" && (
+          <div className="flex gap-4">
+            <FormField
+              control={form.control}
+              name="durationHours"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="mb-1">Hours</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="e.g. 2"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="durationMinutes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="mb-1">Minutes</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="e.g. 30"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )}
+
+        {watchType === "TV Show" && (
+          <FormField
+            control={form.control}
+            name="seasons"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="mb-1">Number of Seasons</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g. 6 seasons"
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         {/* year */}
         <FormField
           control={form.control}
@@ -221,7 +321,7 @@ export default function EntryForm({
         />
         <Button
           type="submit"
-          disabled={mutation.isPending}
+          // disabled={mutation.isPending}
           className="cursor-pointer"
         >
           {mutation.isPending
