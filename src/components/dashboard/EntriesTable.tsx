@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { LucideEllipsis } from "lucide-react";
+import { LucideEllipsis, LucidePopcorn, LucideVideo } from "lucide-react";
 import type { Entry } from "@/types";
 import {
   DropdownMenu,
@@ -49,9 +49,10 @@ export default function EntriesTable({
 }) {
   return (
     <>
-      <Table className="mt-12 overflow-hidden rounded-t-xl bg-white/4 [&_td]:px-12 [&_td]:py-4 [&_th]:px-12 [&_th]:py-6">
+      <Table className="mt-12 overflow-hidden rounded-t-xl bg-white/4 [&_td]:px-10 [&_td]:py-4 [&_th]:px-10 [&_th]:py-6">
         <TableHeader>
           <TableRow className="bg-linear-to-r from-rose-800 to-violet-900 bg-[length:200%_100%] *:font-semibold">
+            <TableHead className="max-w-5">Type</TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Director</TableHead>
             <TableHead>Budget</TableHead>
@@ -65,7 +66,14 @@ export default function EntriesTable({
           {entries.map((entry) => {
             return (
               <TableRow key={entry.id}>
-                <TableCell>{entry.title}</TableCell>
+                <TableCell className="max-w-5">
+                  {entry.type === "Movie" ? (
+                    <LucideVideo className="text-zinc-500" />
+                  ) : (
+                    <LucidePopcorn className="text-zinc-500" />
+                  )}
+                </TableCell>
+                <TableCell className="max-w-72">{entry.title}</TableCell>
                 <TableCell>{entry.director}</TableCell>
                 <TableCell>{formatBudget(entry.budget)}</TableCell>
                 <TableCell>{entry.location}</TableCell>

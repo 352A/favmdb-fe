@@ -30,6 +30,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { Entry } from "@/types";
 import { composeBudget, decomposeBudget } from "@/lib/budget";
+import { Textarea } from "../ui/textarea";
 
 export default function EntryForm({
   entry,
@@ -119,7 +120,7 @@ export default function EntryForm({
             <FormItem>
               <FormLabel className="mb-1">Title</FormLabel>
               <FormControl>
-                <Input placeholder="Inception" {...field} />
+                <Input placeholder="Inception" {...field} maxLength={60} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -156,7 +157,11 @@ export default function EntryForm({
             <FormItem>
               <FormLabel className="mb-1">Director</FormLabel>
               <FormControl>
-                <Input placeholder="Christopher Nolan" {...field} />
+                <Input
+                  placeholder="Christopher Nolan"
+                  {...field}
+                  maxLength={40}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -176,6 +181,8 @@ export default function EntryForm({
                   <Input
                     type="number"
                     step="0.01"
+                    min={1}
+                    max={999}
                     placeholder="e.g. 4.5"
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
@@ -217,7 +224,7 @@ export default function EntryForm({
             <FormItem>
               <FormLabel className="mb-1">Location</FormLabel>
               <FormControl>
-                <Input placeholder="Los Angeles" {...field} />
+                <Input placeholder="Los Angeles" {...field} maxLength={60} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -237,6 +244,8 @@ export default function EntryForm({
                     <Input
                       type="number"
                       placeholder="e.g. 2"
+                      min={1}
+                      max={7}
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
@@ -255,6 +264,8 @@ export default function EntryForm({
                     <Input
                       type="number"
                       placeholder="e.g. 30"
+                      min={0}
+                      max={59}
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
@@ -277,6 +288,8 @@ export default function EntryForm({
                   <Input
                     type="number"
                     placeholder="e.g. 6 seasons"
+                    min={1}
+                    max={50}
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
                   />
@@ -298,6 +311,8 @@ export default function EntryForm({
                 <Input
                   type="number"
                   placeholder="e.g. 2025"
+                  min={1900}
+                  max={2030}
                   {...field}
                   onChange={(e) => field.onChange(Number(e.target.value))}
                 />
@@ -314,7 +329,11 @@ export default function EntryForm({
             <FormItem>
               <FormLabel className="mb-1">Details</FormLabel>
               <FormControl>
-                <Input placeholder="Optional details..." {...field} />
+                <Textarea
+                  placeholder="Optional details..."
+                  {...field}
+                  maxLength={1000}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

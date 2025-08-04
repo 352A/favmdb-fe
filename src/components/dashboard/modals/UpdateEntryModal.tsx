@@ -22,7 +22,7 @@ export default function UpdateEntryModal({
 }: UpdateEntryModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="mt-4 h-[90vh] overflow-hidden">
+      <DialogContent className="mt-1 h-[90vh] overflow-hidden lg:mt-4">
         <div className="hide-scrollbar h-full overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Update {entry?.title}</DialogTitle>
