@@ -1,6 +1,6 @@
 import { SignupForm } from "@/components/auth/signup-form";
 import coverImg from "@/assets/10.jpg";
-import Logo from "@/components/dashboard/logo";
+import Logo from "@/components/dashboard/Logo";
 
 export default function Signup() {
   return (

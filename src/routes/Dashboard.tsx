@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Logo from "@/components/dashboard/logo";
+import Logo from "@/components/dashboard/Logo";
 
 export default function Dashboard() {
   const { modal, openModal, closeModal } = useModal<Entry>();
