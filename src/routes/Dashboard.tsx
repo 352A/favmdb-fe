@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Logo from "@/components/dashboard/logo";
 
 export default function Dashboard() {
   const { modal, openModal, closeModal } = useModal<Entry>();
@@ -49,12 +50,7 @@ export default function Dashboard() {
   return (
     <section className="mx-4 my-6 lg:mx-14 lg:my-12">
       <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">
-          <span className="bg-linear-to-r from-rose-600 to-violet-500 bg-[length:200%_100%] bg-clip-text text-transparent">
-            Fav
-          </span>
-          mdb
-        </h1>
+        <Logo />
         <UserMenu />
       </div>
 
